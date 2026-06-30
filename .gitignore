@@ -1,0 +1,26 @@
+# Build Directories
+/build/
+/build_release/
+CMakeFiles/
+CMakeCache.txt
+Makefile
+cmake_install.cmake
+install_manifest.txt
+CPackConfig.cmake
+CPackSourceConfig.cmake
+_CPack_Packages/
+
+# Executables and Libraries
+flint
+*.a
+*.so
+*.o
+*.appimage
+Flint-*.AppImage
+
+# Qt Creator & IDE settings
+*.user
+.vscode/
+.idea/
+.DS_Store
+*~

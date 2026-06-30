@@ -1,0 +1,107 @@
+name: Build & Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install System Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential \
+            cmake \
+            ninja-build \
+            qt6-base-dev \
+            libssl-dev \
+            rpm \
+            wget \
+            file \
+            libgl1-mesa-dev \
+            libglu1-mesa-dev
+
+      - name: Configure CMake
+        run: |
+          cmake -B build -S . -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_INSTALL_PREFIX=/usr
+
+      - name: Build Executable
+        run: |
+          cmake --build build
+
+      - name: Generate Installer Packages (DEB, RPM, Tarball)
+        run: |
+          cd build
+          cpack -G DEB
+          cpack -G RPM
+          cpack -G TGZ
+
+      - name: Build AppImage
+        env:
+          QMAKE: /usr/lib/qt6/bin/qmake
+          VERSION: ${{ github.ref_name }}
+        run: |
+          # Download linuxdeploy and qt plugin
+          wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
+          wget https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage
+          chmod +x linuxdeploy*.AppImage
+          
+          # Extract AppImages since FUSE is not present in GitHub Actions runner containers
+          ./linuxdeploy-x86_64.AppImage --appimage-extract
+          ./linuxdeploy-plugin-qt-x86_64.AppImage --appimage-extract
+          
+          # Set path to extracted binaries
+          export PATH=$(pwd)/squashfs-root/usr/bin:$PATH
+          
+          # Configure linuxdeploy plugin-qt location
+          export LINUXDEPLOY_PLUGIN_QT_PATH=$(pwd)/squashfs-root/usr/bin/linuxdeploy-plugin-qt
+          
+          # Run deployment
+          ./squashfs-root/usr/bin/linuxdeploy --executable=build/flint \
+            --plugin=qt \
+            --output=appimage \
+            --desktop-file=flint.desktop \
+            --icon-file=flint.png
+          
+          # Rename output AppImage for clear labeling
+          mv Flint-*.AppImage Flint-x86_64.AppImage
+
+      - name: Upload Artifacts (Branch builds)
+        if: "!startsWith(github.ref, 'refs/tags/')"
+        uses: actions/upload-artifact@v4
+        with:
+          name: Flint-Linux-Packages
+          path: |
+            build/flint-*.deb
+            build/flint-*.rpm
+            build/flint-*.tar.gz
+            Flint-x86_64.AppImage
+
+      - name: Create Release (Tag builds)
+        if: "startsWith(github.ref, 'refs/tags/')"
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            build/flint-*.deb
+            build/flint-*.rpm
+            build/flint-*.tar.gz
+            Flint-x86_64.AppImage
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

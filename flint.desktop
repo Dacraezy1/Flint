@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Flint
+Comment=Minimal, Linux-native Minecraft Launcher
+Exec=flint
+Icon=flint
+Terminal=false
+Categories=Game;
