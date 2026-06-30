@@ -75,7 +75,8 @@ jobs:
           export LINUXDEPLOY_PLUGIN_QT_PATH=$(pwd)/squashfs-root/usr/bin/linuxdeploy-plugin-qt
           
           # Run deployment
-          ./squashfs-root/usr/bin/linuxdeploy --executable=build/flint \
+          ./squashfs-root/usr/bin/linuxdeploy --appdir=AppDir \
+            --executable=build/flint \
             --plugin=qt \
             --output=appimage \
             --desktop-file=flint.desktop \
