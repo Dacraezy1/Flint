@@ -59,6 +59,9 @@ jobs:
           QMAKE: /usr/lib/qt6/bin/qmake
           VERSION: ${{ github.ref_name }}
         run: |
+          # Resize icon to standard 512x512 resolution for AppImage compatibility
+          convert flint.png -resize 512x512 flint.png
+          
           # Download linuxdeploy and qt plugin
           wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
           wget https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage
