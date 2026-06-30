@@ -32,7 +32,10 @@ jobs:
             wget \
             file \
             libgl1-mesa-dev \
-            libglu1-mesa-dev
+            libglu1-mesa-dev \
+            libxkbcommon-dev \
+            libfmt-dev \
+            libzstd-dev
 
       - name: Configure CMake
         run: |
