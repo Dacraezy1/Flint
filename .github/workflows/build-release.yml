@@ -35,7 +35,8 @@ jobs:
             libglu1-mesa-dev \
             libxkbcommon-dev \
             libfmt-dev \
-            libzstd-dev
+            libzstd-dev \
+            imagemagick
 
       - name: Configure CMake
         run: |
