@@ -115,9 +115,11 @@ set(CPACK_PACKAGE_LICENSE "GPL-3.0-only")
 
 # Debian/Ubuntu configuration
 set(CPACK_DEBIAN_PACKAGE_SECTION "games")
-set(CPACK_DEBIAN_PACKAGE_DEPENDS "libqt6widgets6, libqt6network6, libqt6concurrent6, libqt6core6")
+set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
+set(CPACK_DEBIAN_PACKAGE_RECOMMENDS "gamemode, mangohud")
 
 # RPM/Fedora configuration
-set(CPACK_RPM_PACKAGE_REQUIRES "qt6-qtbase, qt6-qtbase-gui")
+set(CPACK_RPM_PACKAGE_AUTOREQ ON)
+set(CPACK_RPM_PACKAGE_RECOMMENDS "gamemode, mangohud")
 
 include(CPack)
