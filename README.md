@@ -106,5 +106,45 @@ cpack -G TGZ
 ### AppImage
 Run the continuous integration script or bundle locally:
 ```bash
-./linuxdeploy-x86_64.AppImage --executable=build/flint --plugin=qt --output=appimage --desktop-file=flint.desktop --icon-file=flint.png
+./linuxdeploy-x86_64.AppImage --appdir=AppDir --executable=build/flint --plugin=qt --output=appimage --desktop-file=flint.desktop --icon-file=flint.png
+```
+
+---
+
+## 💾 Installation & Usage of Releases
+
+Flint automatically builds and uploads release artifacts for multiple Linux formats:
+
+### 1. Debian / Ubuntu (`.deb`)
+Download the `.deb` package and install it via `apt` (which resolves the Qt6, OpenSSL, and ZStd library requirements):
+```bash
+sudo apt install ./flint-0.1.0-Linux.deb
+```
+
+### 2. Fedora / RHEL (`.rpm`)
+Download the `.rpm` package and install it via `dnf`:
+```bash
+sudo dnf install ./flint-0.1.0-Linux.rpm
+```
+
+### 3. Arch Linux (`PKGBUILD`)
+Clone this repository and compile the AUR package locally:
+```bash
+git clone https://github.com/Dacraezy1/Flint.git
+cd Flint
+makepkg -si
+```
+
+### 4. Standalone AppImage
+Download the `.AppImage` package, grant executable permission, and run it:
+```bash
+chmod +x Flint-x86_64.AppImage
+./Flint-x86_64.AppImage
+```
+
+### 5. Generic Tarball (`.tar.gz`)
+Download the generic binary package, extract it, and execute Flint:
+```bash
+tar -xvf flint-0.1.0-Linux.tar.gz
+./flint-0.1.0-Linux/bin/flint
 ```

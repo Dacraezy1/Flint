@@ -6,7 +6,9 @@ pkgdesc="Minimal, Linux-native Minecraft Java Edition launcher inspired by the s
 arch=('x86_64')
 url="https://github.com/Dacraezy1/Flint"
 license=('GPL3')
-depends=('qt6-base')
+depends=('qt6-base' 'openssl' 'zstd')
+optdepends=('gamemode: Feral performance optimizations support'
+            'mangohud: Overlay HUD support')
 makedepends=('git' 'cmake' 'ninja')
 provides=('flint')
 conflicts=('flint')
